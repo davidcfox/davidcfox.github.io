@@ -1,0 +1,74 @@
+---
+layout: post
+title: ASPDotNetStorefront Guest Checkout -- Enable Modify Address
+---
+
+<p>Out of the box, AspDotNetStorefront does not allow guest checkout users to modify their billing or shipping address after the initial entry.  However, they do allow them to go back to the "Address Book" view and it appears that modifying the form allows the user to change their address.  A quick review of the code behind for the "createaccount.aspx" page shows that the user truly cannot modify their address when checking out as a guest.</p>
+<p>We had a customer who wanted customers using guest checkout to be able to modify their addresses if necessary.  It turns out to be a fairly simple modification.  The notes below show the portions of the code that need modified/added.</p>
+<p>--Find this line/section:<br />
+if (BillingAddress.AddressID == 0 &amp;&amp; !checkoutByAmazon.IsCheckingOut)</p>
+<p>--Replace with this:<br />
+if (BillingAddress.AddressID == 0 &amp;&amp; !checkoutByAmazon.IsCheckingOut || SkipRegistration)<br />
+{<br />
+BillingAddress.NickName = ctrlBillingAddress.NickName;<br />
+BillingAddress.LastName = ctrlBillingAddress.LastName;<br />
+BillingAddress.FirstName = ctrlBillingAddress.FirstName;<br />
+BillingAddress.Phone = ctrlBillingAddress.PhoneNumber;<br />
+BillingAddress.Company = ctrlBillingAddress.Company;<br />
+BillingAddress.ResidenceType = (ResidenceTypes) Enum.Parse(typeof(ResidenceTypes), ctrlBillingAddress.ResidenceType);<br />
+BillingAddress.Address1 = ctrlBillingAddress.Address1;<br />
+BillingAddress.Address2 = ctrlBillingAddress.Address2;<br />
+BillingAddress.Suite = ctrlBillingAddress.Suite;<br />
+BillingAddress.City = ctrlBillingAddress.City;<br />
+BillingAddress.State = ctrlBillingAddress.State;<br />
+BillingAddress.Zip = ctrlBillingAddress.ZipCode;<br />
+BillingAddress.Country = ctrlBillingAddress.Country;</p>
+<p>--Add the following:                      <br />
+          if (SkipRegistration &amp;&amp; BillingAddress.AddressID &gt; 0)<br />
+             {<br />
+                 //UPDATE ANONYMOUS CHECKOUT USER'S ADDRESS<br />
+                 BillingAddress.UpdateDB();<br />
+             }<br />
+             else { <br />
+                 BillingAddress.InsertDB(ThisCustomer.CustomerID);<br />
+             }</p>
+<p>BillingAddress.MakeCustomersPrimaryAddress(AddressTypes.Billing);<br />
+}<br />
+else<br />
+{<br />
+BillingAddress.NickName = String.Format("{0} {1}", ctrlAccount.FirstName, ctrlAccount.LastName);<br />
+BillingAddress.LastName = ctrlAccount.FirstName;<br />
+BillingAddress.FirstName = ctrlAccount.LastName;<br />
+BillingAddress.Phone = ctrlAccount.Phone;<br />
+}</p>
+<p>ShippingAddress = ThisCustomer.PrimaryShippingAddress;</p>
+<p>--Find this line/section:<br />
+if (ShippingAddress.AddressID == 0 &amp;&amp; !checkoutByAmazon.IsCheckingOut)<br />
+--Replace with this:<br />
+if (ShippingAddress.AddressID == 0 &amp;&amp; !checkoutByAmazon.IsCheckingOut || SkipRegistration)<br />
+{<br />
+if (AllowShipToDifferentThanBillTo)<br />
+{<br />
+ShippingAddress.NickName = ctrlBillingAddress.NickName;<br />
+ShippingAddress.LastName = ctrlShippingAddress.LastName;<br />
+ShippingAddress.FirstName = ctrlShippingAddress.FirstName;<br />
+ShippingAddress.Phone = ctrlShippingAddress.PhoneNumber;<br />
+ShippingAddress.Company = ctrlShippingAddress.Company;<br />
+ShippingAddress.ResidenceType = (ResidenceTypes) Enum.Parse(typeof(ResidenceTypes), ctrlShippingAddress.ResidenceType);<br />
+ShippingAddress.Address1 = ctrlShippingAddress.Address1;<br />
+ShippingAddress.Address2 = ctrlShippingAddress.Address2;<br />
+ShippingAddress.Suite = ctrlShippingAddress.Suite;<br />
+ShippingAddress.City = ctrlShippingAddress.City;<br />
+ShippingAddress.State = ctrlShippingAddress.State;<br />
+ShippingAddress.Zip = ctrlShippingAddress.ZipCode;<br />
+ShippingAddress.Country = ctrlShippingAddress.Country;</p>
+<p>--Add the following:<br />
+          if (SkipRegistration &amp;&amp; ShippingAddress.AddressID &gt; 0)<br />
+             {<br />
+                  //UPDATE ANONYMOUS CHECKOUT USER'S ADDRESS<br />
+                  ShippingAddress.UpdateDB();<br />
+              }<br />
+              else<br />
+              {<br />
+                    ShippingAddress.InsertDB(ThisCustomer.CustomerID);<br />
+               }</p>

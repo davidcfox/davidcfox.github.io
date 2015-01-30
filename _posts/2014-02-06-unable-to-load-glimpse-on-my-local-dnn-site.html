@@ -1,0 +1,17 @@
+---
+layout: post
+title: Unable to Load Glimpse on My Local DNN Site
+---
+
+<p>Recently, I needed to do some profiling of a DotNetNuke module I am building for one of our clients.</p>
+<p>I have read all of the great things about using Glimpse (http://www.getglimpse.com) and decided it would be a great tool to do some code profiling of this module.</p>
+<p>Unfortunately, after installing it via NuGet, it locked my site up and was giving me the following error:</p>
+<p>No data has been found. This could be caused because:</p>
+<ul>
+<li>the data is still loading by the client, or</li>
+<li>no data has been received from the server (check to see if the data &amp; metadata payloads are present), or</li>
+<li>no plugin has been loaded, or</li>
+<li>an error has been thrown in the client (please check your JavaScript console and let us know if anything is up).</li>
+</ul>
+<p>Several Google searches did not turn up much help for troubleshooting this issue.  I tried loading the same site in Firefox, was using Chrome, and the page loaded, but I was receiving "Unresponsive" script alerts on the page.  I was able to navigate around some of the tabs within the Glimpse console in Firefox after closing the "Unresponsive" script error.  I noticed that each time I clicked the "cache" tab, the page became unresponsive again.</p>
+<p>So, I went to the Glimpse.axd page and deselected the "cache" tab button and the following code was generated for my web.config file.  I added the following to my web.config and was able to successfully run Glimpse in both Firefox and Chrome.  This fix works for me....until I need the "cache" tab!</p>

@@ -1,0 +1,15 @@
+---
+layout: post
+title: How To Select Distinct Records on a Single Column
+---
+
+<p>Today I needed to be able to retrieve a list of records that was distinct based on one of the columns in the table.  Unfortunately, it took a while to find a suitable solution.  If you are using Microsoft SQL Server 2008 and up, you can make use of this simple function to get a record set that is distinct based on a single column:</p>
+<p>WITH temp AS<br />
+(<br />
+SELECT *,<br />
+  ROW_NUMBER() OVER(PARTITION BY [DISTINCT COLUMN NAME] ORDER BY [DISTINCT COLUMN NAME]) AS rn<br />
+FROM [YOURSERVER].[DBO].[YOUR TABLE]<br />
+)<br />
+select * from temp where rn=1</p>
+<p>Thanks to Dannol Liu for his answer here:<br />
+<a href="http://social.msdn.microsoft.com/Forums/sqlserver/en-US/7fdf747b-12dd-4992-b0c2-a747bb30e869/using-distinct-on-one-column-only?forum=transactsql">http://social.msdn.microsoft.com/Forums/sqlserver/en-US/7fdf747b-12dd-4992-b0c2-a747bb30e869/using-distinct-on-one-column-only?forum=transactsql</a></p>

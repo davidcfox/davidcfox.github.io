@@ -1,0 +1,13 @@
+---
+layout: post
+title: Restoring a SQL Server Backup File (.bak) After Receiving (No Backupset Selected
+  to Be Restored)
+---
+
+<p>Today, I ran into an issue where I need to restore a database file that I had generated on one of our remote servers.  I had placed this file in my dropbox account and downloaded to my local machine.  </p>
+<p>Once on my machine, I moved the file to the MSSQL Backups folder and proceeded to try to restore the file.  I was unable to do so and received this error, "No Backupset Selected to Be Restored". I viewed the permissions on the .bak file in question and another .bak file on my machine and noticed that the file I was unable to import was missing some permissions.  With some help from this <a href="http://dba.stackexchange.com/questions/23864/broken-ntfs-permissions-for-mssqlsqlexpress">article</a>, I was able to get the correct permissions on my file and restore the backup.</p>
+<p>I had to add the following users to my .bak file via the "Properties/Security" tab for the file.  These are the users to add:</p>
+<ol>
+<li>NT SERVICE\MSSQL$SQLEXPRESS  (Give full permissions)</li>
+<li>SQLServerMSSQLUser$[Your-Computer-Name]$SQLEXPRESS  (Give full permissions)</li>
+</ol>

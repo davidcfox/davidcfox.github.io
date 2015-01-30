@@ -1,0 +1,77 @@
+---
+layout: post
+title: Namespace Bootstrap Classes
+---
+
+<p>I have recently completed some work where I needed to namespace the Bootstrap classes to prevent interference with an existing skin on a site.  The process for compiling LESS and SASS classes is essentially the same:</p>
+<pre><code> .twb {
+  @import 
+   "bootstrap files";
+ }
+</code></pre>
+<p>After some trial and error, I found it is advantageous to leave certain files out of the namespaced import.  Several files, like the javascript components place their markup directly in the "body" tag, so unless you are applying your custom class to the page body, your styles will not be applied.</p>
+<p>Here is the combination that worked for me in a DNN module:</p>
+<pre><code>@import
+  // Some compass goodness
+  "compass",
+  "bootstrap/normalize",
+  // Variables - override any bootstrap variables in here
+ "variables",
+</code></pre>
+<p>// Core variables and mixins<br />
+     "bootstrap-compass",<br />
+     "bootstrap/variables",<br />
+     "bootstrap/mixins",<br />
+      // Components w/ JavaScript<br />
+     "bootstrap/modals",<br />
+     "bootstrap/tooltip",<br />
+     "bootstrap/popovers", <br />
+     "bootstrap/carousel",<br />
+     "bootstrap/close";</p>
+<pre><code>.twb {
+   @import
+
+   // Place mixins. Override Bootstrap mixins you may wish
+   "mixins",
+   "sass_helpers/mixins",
+
+   // Reset and dependencies
+   "bootstrap/print",
+   "bootstrap/glyphicons",
+
+   // Core CSS
+   "bootstrap/scaffolding",
+   "bootstrap/type",
+   "bootstrap/code",
+   "bootstrap/grid",
+   "bootstrap/tables",
+   "bootstrap/forms",
+   "bootstrap/buttons",
+
+   // Components
+   "bootstrap/component-animations",
+   "bootstrap/dropdowns",
+   "bootstrap/button-groups",
+   "bootstrap/input-groups",
+   "bootstrap/navs",
+   "bootstrap/navbar",
+   "bootstrap/breadcrumbs",
+   "bootstrap/pagination",
+   "bootstrap/pager",
+   "bootstrap/labels",
+   "bootstrap/badges",
+   "bootstrap/jumbotron",
+   "bootstrap/thumbnails",
+   "bootstrap/alerts",
+   "bootstrap/progress-bars",
+   "bootstrap/media",
+   "bootstrap/list-group",
+   "bootstrap/panels",
+   "bootstrap/responsive-embed",
+   "bootstrap/wells",
+
+   // Utility classes
+   "bootstrap/utilities",
+   "bootstrap/responsive-utilities";
+}
+</code></pre>

@@ -1,0 +1,14 @@
+---
+layout: post
+title: Sorting Arrays of Numbers.....Numerically In Javascript
+---
+
+<p>Today, we ran across an issue with a page that had select boxes that were populated with numeric values that were being passed in an array of strings.  An issue arose using the basic "array.sort()" function.  The numbers were sorting....alphabetically.</p>
+<p>Having used frameworks for this type of functionality in the past, I have not dealt with this issue.  It turns out that one needs to pass a function into the "sort" method in order to sort "numerically".  </p>
+<p>Here is the a sample:</p>
+<p>var foo = ["1", "3", "7.5", "4.5", "4", "5", "12", "40", "25", "20"];<br />
+foo.sort();  --Results: ["1", "12", "20", "25", "3", "4", "4.5", "40", "5", "7.5"] </p>
+<p>foo.sort(function(a, b){return a-b;}); --Results: ["1", "3", "4", "4.5", "5", "7.5", "12", "20", "25", "40"]</p>
+<p>foo.sort(function(a,b){return b-a;}); --Results: ["40", "25", "20", "12", "7.5", "5", "4.5", "4", "3", "1"]</p>
+<p>Lesson learned...</p>
+<p>Source: <a href="http://www.w3schools.com/jsref/jsref_sort.asp">http://www.w3schools.com/jsref/jsref_sort.asp</a></p>

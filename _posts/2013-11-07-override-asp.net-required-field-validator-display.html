@@ -1,0 +1,26 @@
+---
+layout: post
+title: Override ASP.NET Required Field Validator Display
+---
+
+<p>I have a form that uses ASP.NET required field validators set to Display "Dynamic" and when displayed, the error message span has a "display:inline" style applied directly to the tag.  This was causing undesirable behavior in that my message were not all displaying on a new line.</p>
+<p>Found the solution is to override the "ValidatorUpdateDisplay" function in my view. Here is the code:</p>
+<p>function ValidatorUpdateDisplay(val) <br />
+     {<br />
+            if (typeof (val.display) == "string") {<br />
+                if (val.display == "None") {<br />
+                    return;<br />
+                }<br />
+                if (val.display == "Dynamic") {<br />
+                    val.style.display = val.isvalid ? "none" : "block";<br />
+                    return;<br />
+                }<br />
+            }<br />
+            if ((navigator.userAgent.indexOf("Mac") &gt; -1) &amp;&amp; (navigator.userAgent.indexOf("MSIE") &gt; -1)) {<br />
+                val.style.display = "inline";<br />
+            }<br />
+            val.style.visibility = val.isvalid ? "hidden" : "visible";</p>
+<pre><code> }
+</code></pre>
+<p>Thanks to the poster with only one vote on this StackOverflow post...you now have two votes!</p>
+<p><a href="http://stackoverflow.com/questions/2243498/requiredfieldvalidator-places-displayinline-on-the-text">http://stackoverflow.com/questions/2243498/requiredfieldvalidator-places-displayinline-on-the-text</a></p>

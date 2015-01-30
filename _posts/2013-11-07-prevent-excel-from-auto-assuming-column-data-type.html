@@ -1,0 +1,10 @@
+---
+layout: post
+title: Prevent Excel from Auto-Assuming Column Data Type
+---
+
+<p>I ran into an issue today with an Excel importer program that I built several months ago throwing errors with a sheet.  The error was a SQL error saying it was not possible to insert a null value for a column row.  All of the rows in the sheet had data and I was able to insert small subsets of the data (7 rows at a time) without errors.</p>
+<p>Through debugging, I found that the import was breaking at a row where the value in column 1 contained numbers and non-numeric values.  All of the rows up to this point (row 15) had only numbers.  Thanks to a co-developer who had wasted too much time debugging a similar issue a while back, he pointed me in the right direction of a fix.</p>
+<p>It seems that by default, the OLE/JET Database engine tries to assume a column type based on the first 8 rows in the column.  In my case, it was assuming that my column was numeric, so when it hit the alphanumeric column, it was reading the value as "null".</p>
+<p>The fix is available in this stackoverflow post: <a href="http://www.google.com/url?q=http%3A%2F%2Fstackoverflow.com%2Fquestions%2F298726%2Faccessing-excel-spreadsheet-with-c-sharp-occasionally-returns-blank-value-for-so&amp;amp;sa=D&amp;amp;sntz=1&amp;amp;usg=AFQjCNEszK99HjggJFi-Tov8Hrod656Iwg" style="font-family: arial, sans-serif; font-size: 13px;">http://stackoverflow.com/questions/298726/accessing-excel-spreadsheet-with-c-sharp-occasionally-returns-blank-value-for-so</a>   </p>
+<p>Lesson learned...may need to look into other solutions, as it may not always be possible to make this change on the server.</p>

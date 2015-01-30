@@ -1,0 +1,30 @@
+---
+layout: post
+title: SQL Cursor Function to Run Stored Procedure with Select Statement Results
+---
+
+<p>I recently had a need to delete several hundred products from one of our AspDotNetStorefront Sites. Writing a select statement to retrieve the products that I needed to remove was easy enough, but I had a little challenge to figure out how to execute the "NukeProduct" stored procedure for those returned products.<br />
+It turns out that a SQL Cursor was exactly what I needed. Here is the code I used to batch "Delete/Nuke" products from our storefront database:<br />
+USE Database<br />
+GO<br />
+DECLARE @ProductID int<br />
+DECLARE @getProductID CURSOR<br />
+SET @getProductID = CURSOR FOR<br />
+--SELECT STATEMENT TO RETRIEVE PRODUCT ID VALUES TO BE DELETED<br />
+SELECT p.ProductID, p.IsAKit, p.Name, p.SKU<br />
+FROM [Database].[dbo].[Product] as pLEFT JOIN [Database].[dbo].[ProductVariant] as pv<br />
+ON p.ProductID = pv.ProductID<br />
+WHERE p.SKU NOT IN (Select SKU FROM [Database].[dbo].[SKUSToMatch_Temp]) AND p.IsAKit &lt;&gt; 1 AND p.SKU &lt;&gt; '19372-AAU' AND p.SKU &lt;&gt; '19372-AAN'<br />
+ORDER BY p.ProductID<br />
+OPEN @getProductID<br />
+FETCH NEXT<br />
+FROM @getProductID INTO @ProductID<br />
+WHILE @@FETCH_STATUS = 0<br />
+BEGIN<br />
+EXEC [dbo].[aspdnsf_NukeProduct] @ProductID ---STORED PROCEDURE TO RUN WITH PRODUCT ID VALUES<br />
+FETCH NEXT<br />
+FROM @getProductID INTO @ProductID<br />
+END<br />
+CLOSE @getProductID<br />
+DEALLOCATE @getProductID<br />
+GO</p>

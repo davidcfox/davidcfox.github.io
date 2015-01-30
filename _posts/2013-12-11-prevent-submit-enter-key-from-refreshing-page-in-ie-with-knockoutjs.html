@@ -1,0 +1,19 @@
+---
+layout: post
+title: Prevent Submit/Enter Key from Refreshing Page in IE with KnockoutJS
+---
+
+<p>Today, I built a very simple calculator using KnockoutJS to handle the calculator events and found a strange issue in Internet Explorer when pressing the enter key while in the input for the calculator.  This is my first Knockout project, so I  am not too familiar with it at this point, but I found this helpful handler that allowed me to catch the enter key press and prevent it from firing.</p>
+<pre><code> ko.bindingHandlers.returnKey = {
+ init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+         ko.utils.registerEventHandler(element, 'keydown', function(evt) {
+                 if (evt.keyCode === 13) {
+                     evt.preventDefault();
+                     return false;
+                 }
+         });
+     }
+};
+</code></pre>
+<p>I placed the above bindingHandler above my ViewModel and I placed the following on the input field that I was wanting to suppress the event on:</p>
+<p>I am sure there is a better way to do this and when I find it on future projects, I will update this.  </p>
