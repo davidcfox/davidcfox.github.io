@@ -3,13 +3,13 @@
 permalink: /:categories/:year/:month/:day/:title 
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-highlighter: rouge
+highlighter: pygments
 
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
 title : David C Fox
-tagline: Site Tagline
+tagline: Developer Thoughts
 author :
   name : David Fox
   email : thedavidcfox@gmail.com
