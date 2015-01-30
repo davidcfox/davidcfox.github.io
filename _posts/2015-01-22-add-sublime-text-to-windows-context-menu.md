@@ -9,6 +9,8 @@ tags: ["windows", "sublime", "useful tip"]
 
 I finally gave into peer pressure and installed Sublime Text on my computer.  I have to say that I am enjoying it far more than my beloved Notepad++.  One of my frustrations was that there was not a context menu open to open files with Sublime.  A quick Google search brought me to this [Gist](https://gist.github.com/mrchief/5628677/) that easily added the context menu I was after.
 
+<!--more-->
+
 If you don't want to follow the link above, here are the instructions:
 
 First, Create a .bat file with the following code in it:
