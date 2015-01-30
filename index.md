@@ -1,9 +1,15 @@
 ---
 layout: page
-title: Hello World!
-tagline: Supporting tagline
+title: David C Fox
+tagline: Developer Thoughts
 ---
 {% include JB/setup %}
+
+<div class="blog-index">  
+  {% assign post = site.posts.first %}
+  {% assign content = post.content %}
+  {% include post_detail.html %}
+</div>
 
 Read [Jekyll Quick Start](http://jekyllbootstrap.com/usage/jekyll-quick-start.html)
 
